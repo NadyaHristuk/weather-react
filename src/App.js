@@ -27,7 +27,7 @@ class App extends Component {
     let lng = e.latLng.lng();
     console.log(lat, lng);
     const { numForecastDay } = this.state;
-    const URL = `http://api.apixu.com/v1/forecast.json?key=${WEATHER_KEY}&q=${lat},
+    const URL = `https://api.apixu.com/v1/forecast.json?key=${WEATHER_KEY}&q=${lat},
     ${lng}&days=${numForecastDay}`;
     console.log(URL);
     axios
@@ -59,7 +59,7 @@ class App extends Component {
   searchImages() {
     const { cityName } = this.state;
 
-    const URL = `https://pixabay.com/api/?key=${IMAGE_KEY}&q=${cityName}`;
+    const URL = `https://cors.io/?https://pixabay.com/api/?key=${IMAGE_KEY}&q=${cityName}`;
     console.log(URL);
     axios
       .get(URL)
@@ -84,7 +84,7 @@ class App extends Component {
 
   updateWeather() {
     const { cityName, numForecastDay } = this.state;
-    const URL = `http://api.apixu.com/v1/forecast.json?key=${WEATHER_KEY}&q=${cityName}&days=${numForecastDay}`;
+    const URL = `https://cors.io/?http://api.apixu.com/v1/forecast.json?key=${WEATHER_KEY}&q=${cityName}&days=${numForecastDay}`;
 
     axios
       .get(URL)
@@ -116,18 +116,15 @@ class App extends Component {
   updateWeatherAndImage(value) {
     const { cityName, numForecastDay } = this.state;
     let UpWeather = axios.get(
-      `http://api.apixu.com/v1/forecast.json?key=${WEATHER_KEY}&q=${cityName}&days=${numForecastDay}`
+      `https://cors.io/?http://api.apixu.com/v1/forecast.json?key=${WEATHER_KEY}&q=${cityName}&days=${numForecastDay}`
     );
     let UpImg = axios.get(
-      `https://pixabay.com/api/?key=${IMAGE_KEY}&q=${cityName}`
+      `https://cors.io/?https://pixabay.com/api/?key=${IMAGE_KEY}&q=${cityName}`
     );
     Promise.all([UpWeather, UpImg]).then(res => {
       console.log(res);
       this.setState({
         isLoading: false,
-        bgIMG:
-          res[1].data.hits[Math.floor(Math.random() * res[1].data.hits.length)]
-            .largeImageURL,
         cityName: res[0].data.location.name,
         lat: res[0].data.location.lat,
         lng: res[0].data.location.lon,
@@ -135,7 +132,10 @@ class App extends Component {
         temp_c: res[0].data.current.temp_c,
         text: res[0].data.current.condition.text,
         iconUrl: res[0].data.current.condition.icon,
-        forecastDays: res[0].data.forecast.forecastday
+        forecastDays: res[0].data.forecast.forecastday,
+        bgIMG:
+          res[1].data.hits[Math.floor(Math.random() * res[1].data.hits.length)]
+            .largeImageURL
       });
     });
   }
